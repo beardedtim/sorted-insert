@@ -93,24 +93,23 @@ const fromSorted = (fn = false, list = []) => {
   if(fn(item)){
     items.push(item)
     let upIndex = index + 1,
-        maybeUp = list.length > upIndex ? list[upIndex] : false
-    while(fn(maybeUp) && maybeUp !== false){
-      items.push(maybeUp)
+        maybeUp = list.length > upIndex ? list[upIndex] : false,
+        downIndex = index - 1,
+        maybeDown = downIndex >= 0 ? list[downIndex] :  'THIS IS A NO GO'
+    while(fn(maybeUp) || fn(maybeDown)){
+      if(fn(maybeUp) && maybeUp !== 'THIS IS A NO GO'){
+        items.push(maybeUp)
+        upIndex++
+        maybeUp = list.length > upIndex ? list[upIndex] : 'THIS IS A NO GO'
+      }
       if(items.length === list.length){
         return items
       }
-      upIndex++
-      maybeUp = list.length > upIndex ? list[upIndex] : false
-    }
-    let downIndex = index - 1,
-        maybeDown = downIndex >= 0 ? list[downIndex] : false
-    while(fn(maybeDown) && maybeDown !== false){
-      items.unshift(maybeDown)
-      if(items.length === list.length){
-        return items
+      if(fn(maybeDown) && maybeDown !== 'THIS IS A NO GO'){
+        items.unshift(maybeDown)
+        downIndex--
+        maybeDown = downIndex >= 0 ? list[downIndex] : 'THIS IS A NO GO'
       }
-      downIndex--
-      maybeDown = downIndex >= 0 ? list[downIndex] : false
     }
   }else {
     // Let's user recursion to solve this!
@@ -120,6 +119,8 @@ const fromSorted = (fn = false, list = []) => {
   return items
   
 }
+
+const list = [0,1,2,3,4,5,6,7,8,9,10]
 
 module.exports = {
   insert: insert,
