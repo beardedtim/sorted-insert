@@ -11,13 +11,13 @@ This has the argument order of `(item,list,sortingFunction)` which may not be he
 ##Usage
 
 ```
-$ yarn add bearded-sorted-insert
+$ yarn add @beardedtim/sorted-insert
 ```
 
 And then in the project you want it
 
 ```
-const insert = require('bearded-sorted-insert'),
+const insert = require('@beardedtim/sorted-insert'),
       list = [0,2],
       item = 1,
       withNewItem = insert(item,list) // [0,1,2]
