@@ -87,32 +87,35 @@ const fromSorted = (fn = false, list = []) => {
   let min = 0,
       max = list.length - 1,
       items = [],
-      count = 0
-    const index = Math.floor((max + min) / 2),
-          item = list[index]
-    if(fn(item)){
-      items.push(item)
-      let upIndex = index + 1,
-          maybeUp = list.length > upIndex ? list[upIndex] : false
-      while(fn(maybeUp)){
-        items.push(maybeUp)
-        if(items.length === list.length){
-          return items
-        }
-        upIndex++
+      index = Math.floor((max + min) / 2),
+      item = list[index]
+  // If we get lucky and the middle matches our query
+  if(fn(item)){
+    items.push(item)
+    let upIndex = index + 1,
         maybeUp = list.length > upIndex ? list[upIndex] : false
+    while(fn(maybeUp) && maybeUp !== false){
+      items.push(maybeUp)
+      if(items.length === list.length){
+        return items
       }
-      let downIndex = index - 1,
-          maybeDown = downIndex >= 0 ? list[downIndex] : false
-      while(fn(maybeDown)){
-        items.unshift(maybeDown)
-        if(items.length === list.length){
-          return items
-        }
-        downIndex--
-        maybeDown = downIndex >= 0 ? list[downIndex] : false
-      }
+      upIndex++
+      maybeUp = list.length > upIndex ? list[upIndex] : false
     }
+    let downIndex = index - 1,
+        maybeDown = downIndex >= 0 ? list[downIndex] : false
+    while(fn(maybeDown) && maybeDown !== false){
+      items.unshift(maybeDown)
+      if(items.length === list.length){
+        return items
+      }
+      downIndex--
+      maybeDown = downIndex >= 0 ? list[downIndex] : false
+    }
+  }else {
+    // Let's user recursion to solve this!
+    return fromSorted(fn,list.slice(0,index)).concat(fromSorted(fn,list.slice(index + 1)))
+  }
   
   return items
   

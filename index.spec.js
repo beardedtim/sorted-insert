@@ -181,4 +181,24 @@ describe('fromSorted',()=>{
           list = [1,2,3]
     expect(fromSorted(test,list)).to.deep.equal([1,2,3])
   })
+  
+  it('works if we want the beginning of the list',()=>{
+    const test = a => a < 2,
+          list = [0,1,2]
+    expect(fromSorted(test,list)).to.deep.equal([0,1])
+  })
+  
+  it('works if we want the end of a list',()=>{
+    const test = a => a > 2,
+          list = [0,1,2,3,4,5]
+    expect(fromSorted(test,list)).to.deep.equal([3,4,5])
+  })
+  
+  it('works if we just want parts of the list',()=>{
+    const test = a => a > 2,
+          // because we bail at the first sign of failure
+          // we can cheat this 
+          list = [0,1,2,3,4,5,6,7,2]
+    expect(fromSorted(test,list)).to.deep.equal([3,4,5,6,7])
+  })
 })
