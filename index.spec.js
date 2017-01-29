@@ -1,5 +1,6 @@
 const expect = require('chai').expect
-const insert = require('./index')
+const insert = require('./index').insert
+const fromSorted = require('./index').fromSorted
 
 describe('insert',()=>{
   
@@ -147,4 +148,37 @@ describe('insert',()=>{
     ])
   })
   
+})
+
+describe('fromSorted',()=>{
+  it('throws an error if you did not give it a function to know what to grab.',()=>{
+    expect(()=>fromSorted()).to.throw('You have not given me a function to know if I should grab an item or not!')
+  })
+  
+  it('returns an empty list if an empty list or no list is passed',()=>{
+    const list = []
+    expect(fromSorted(a => a, [])).to.deep.equal([])
+    expect(fromSorted(a => a)).to.deep.equal([])
+  })
+  
+  it('returns items that pass the test until either end fails',()=>{
+    const list = [0,1,2,3],
+          fn = a => a > 0 && a < 3,
+          expected = [1,2]
+    expect(fromSorted(fn,list)).to.deep.equal(expected)
+    
+    const multipleSameItems = [1,2,2,3,4,4,4,5,6],
+          between = a => a < 5 && a > 1
+    expect(fromSorted(between,multipleSameItems)).to.deep.equal([
+      2,2,
+      3,
+      4,4,4,
+    ])
+  })
+  
+  it('will return the whole list if all of the list passes the test',()=>{
+    const test = a => a,
+          list = [1,2,3]
+    expect(fromSorted(test,list)).to.deep.equal([1,2,3])
+  })
 })

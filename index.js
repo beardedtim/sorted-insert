@@ -75,7 +75,53 @@ const insert = (item,list = [], fn = (a,b) => a < b) => {
   throw new Error('insert failed somehow!')
 }
 
-module.exports = insert
+const fromSorted = (fn = false, list = []) => {
+  // Bail early if we do not have a function
+  if(!fn){
+    throw new Error('You have not given me a function to know if I should grab an item or not!')
+  }
+  // Bail early if the list is empty
+  if(!list.length){
+    return list
+  }
+  let min = 0,
+      max = list.length - 1,
+      items = [],
+      count = 0
+    const index = Math.floor((max + min) / 2),
+          item = list[index]
+    if(fn(item)){
+      items.push(item)
+      let upIndex = index + 1,
+          maybeUp = list.length > upIndex ? list[upIndex] : false
+      while(fn(maybeUp)){
+        items.push(maybeUp)
+        if(items.length === list.length){
+          return items
+        }
+        upIndex++
+        maybeUp = list.length > upIndex ? list[upIndex] : false
+      }
+      let downIndex = index - 1,
+          maybeDown = downIndex >= 0 ? list[downIndex] : false
+      while(fn(maybeDown)){
+        items.unshift(maybeDown)
+        if(items.length === list.length){
+          return items
+        }
+        downIndex--
+        maybeDown = downIndex >= 0 ? list[downIndex] : false
+      }
+    }
+  
+  return items
+  
+}
+
+module.exports = {
+  insert: insert,
+  fromSorted: fromSorted
+}
 
 
 
