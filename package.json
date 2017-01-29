@@ -1,6 +1,6 @@
 {
   "name": "@beardedtim/sorted-insert",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A basic sorted insert for a list",
   "main": "index.js",
   "author": "<timiroberts@gmail.com> (https://github.com/beardedtim)",
